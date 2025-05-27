@@ -1,12 +1,25 @@
 # scalex-invest
 Plataforma ScaleX Invest - backend Node/Prisma e frontend Next/Tailwind
 
+## Setup
+
+```bash
+# clone
+# git clone <repo> && cd scalex-invest
+
+cd backend
+npm install
+npx prisma migrate dev
+npx ts-node prisma/seed.ts
+npm run dev
+```
+
 ## Deploy da API (Render)
 
 1. Crie um novo **Web Service** no [Render](https://render.com/).
-2. Selecione este repositório e a pasta `backend/backend` como diretório de build.
+2. Selecione este repositório e a pasta `backend` como diretório de build.
 3. O Render detectará automaticamente o arquivo `render.yaml` com as seguintes configurações:
-   - **Build Command**: `cd backend/backend && npm install && npx prisma generate`
+   - **Build Command**: `cd backend && npm install && npx prisma generate`
    - **Start Command**: `node dist/index.js`
    - **Health Check Path**: `/health`
 4. Defina as variáveis de ambiente:
@@ -55,9 +68,10 @@ Será criado um bucket S3 de exemplo e exibido o endpoint nos *outputs*. Ajuste 
 
 ```bash
 # Backend
-cd backend/backend
+cd backend
 npm test
 
+cd frontend
 # Frontend
-npx cypress open
+npm run cypress run
 ```
