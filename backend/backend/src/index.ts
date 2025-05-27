@@ -1,10 +1,12 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
+import userRoutes from './routes/userRoutes';
 
 const app = express();
 const prisma = new PrismaClient();
 
-app.use(express.json());
+app.u
+  app.use('/users', userRoutes);se(express.json());
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
