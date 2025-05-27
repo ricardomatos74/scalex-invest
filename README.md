@@ -15,3 +15,12 @@ Plataforma ScaleX Invest - backend Node/Prisma e frontend Next/Tailwind
 5. Salve e aguarde o deploy. Os logs em tempo real ficarão disponíveis no painel do serviço.
 
 > Use o endpoint `/health` para monitorar a disponibilidade da API.
+
+## Deploy do Frontend (Vercel)
+
+1. No [Vercel](https://vercel.com/), clique em **Import Project** e selecione este repositório.
+2. Defina a pasta `frontend` como **Root Directory**.
+3. O Vercel detectará automaticamente o framework **Next.js** e utilizará o arquivo `frontend/vercel.json` para configuração.
+4. Configure a variável de ambiente:
+   - `NEXT_PUBLIC_API_URL` – URL pública da API Render (ex.: https://scalex-invest-api.onrender.com)
+5. Finalize a importação e aguarde o build. Após o deploy, o frontend estará acessível no domínio gerado pela Vercel.
