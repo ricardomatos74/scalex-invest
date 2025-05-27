@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: scalex-invest-api
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: |
+      cd backend/backend
+      npm install
+      npx prisma generate
+    startCommand: node dist/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        value: ${DATABASE_URL}
+      - key: NODE_ENV
+        value: production
