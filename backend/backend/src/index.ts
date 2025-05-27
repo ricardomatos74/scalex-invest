@@ -1,21 +1,26 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
+
 import userRoutes from './routes/userRoutes';
+import authRoutes from './routes/authRoutes';
+import adminRoutes from './routes/adminRoutes';
 
 const app = express();
 const prisma = new PrismaClient();
 
-app.u
-  app.use('/users', userRoutes);se(express.json());
+// Middleware para parsear JSON
+app.use(express.json());
 
+// Rotas públicas
+app.use('/users', userRoutes);
+app.use('/auth', authRoutes);
+
+// Rotas protegidas (painel admin)
+app.use('/admin', adminRoutes);
+
+// Health check
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
-});
-
-// Example users endpoint
-app.get('/users', async (_req, res) => {
-  const users = await prisma.user.findMany();
-  res.json(users);
 });
 
 const PORT = process.env.PORT || 4000;
