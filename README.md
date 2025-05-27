@@ -50,3 +50,14 @@ terraform apply
 Será criado um bucket S3 de exemplo e exibido o endpoint nos *outputs*. Ajuste os arquivos `.tf` conforme a infraestrutura desejada (ECS, RDS, etc.).
  Render (ex.: https://scalex-invest-api.onrender.com)
 5. Finalize a importação e aguarde o build. Após o deploy, o frontend estará acessível no domínio gerado pela Vercel.
+
+## Testes
+
+```bash
+# Backend
+cd backend/backend
+npm test
+
+# Frontend
+npx cypress open
+```
