@@ -22,5 +22,31 @@ Plataforma ScaleX Invest - backend Node/Prisma e frontend Next/Tailwind
 2. Defina a pasta `frontend` como **Root Directory**.
 3. O Vercel detectará automaticamente o framework **Next.js** e utilizará o arquivo `frontend/vercel.json` para configuração.
 4. Configure a variável de ambiente:
-   - `NEXT_PUBLIC_API_URL` – URL pública da API Render (ex.: https://scalex-invest-api.onrender.com)
+   - `NEXT_PUBLIC_API_URL` – URL pública da API
+   - 
+
+## Ambiente Docker (Local)
+
+```bash
+docker-compose up --build
+```
+
+- Backend: http://localhost:4000
+- Frontend: http://localhost:3000
+
+## Provisionamento com Terraform
+
+1. Instale o [Terraform](https://terraform.io).
+2. Acesse a pasta `infra/terraform`.
+3. Configure suas credenciais AWS (`aws configure` ou variáveis de ambiente).
+4. Execute:
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```
+
+Será criado um bucket S3 de exemplo e exibido o endpoint nos *outputs*. Ajuste os arquivos `.tf` conforme a infraestrutura desejada (ECS, RDS, etc.).
+ Render (ex.: https://scalex-invest-api.onrender.com)
 5. Finalize a importação e aguarde o build. Após o deploy, o frontend estará acessível no domínio gerado pela Vercel.
