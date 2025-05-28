@@ -1,27 +1,27 @@
+import React from 'react';
 import { useRouter } from 'next/router';
-import { useEffect, useState, ComponentType } from 'react';
-import { getToken, getRole, getDashboardRoute } from '../utils/auth';
+import { useAuth } from '../contexts/AuthContext';
 
-export default function withAuth<P>(Wrapped: ComponentType<P>, roles: string[]) {
-  return function Protected(props: P) {
+export function withAuth<P extends object>(
+  WrappedComponent: React.ComponentType<P>,
+  allowedRoles: string[]
+) {
+  const ComponentWithAuth: React.FC<P> = (props) => {
     const router = useRouter();
-    const [allowed, setAllowed] = useState(false);
+    const { user } = useAuth();
 
-    useEffect(() => {
-      const token = getToken();
-      const role = getRole();
-      if (!token) {
-        router.replace('/login');
-        return;
-      }
-      if (role && !roles.includes(role)) {
-        router.replace(getDashboardRoute(role));
-        return;
-      }
-      setAllowed(true);
-    }, []);
+    if (!user) {
+      router.push('/login');
+      return null;
+    }
 
-    if (!allowed) return null;
-    return <Wrapped {...props} />;
+    if (!allowedRoles.includes(user.role)) {
+      router.push('/');
+      return null;
+    }
+
+    return <WrappedComponent {...props} />;
   };
+
+  return ComponentWithAuth;
 }
