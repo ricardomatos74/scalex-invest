@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import withAuth from '../../components/withAuth';
+import { withAuth } from '../../components/withAuth';
 import api from '../../services/api';
 import AnalyticsCard from '../../components/AnalyticsCard';
 import ProposalTable, { Proposal } from '../../components/ProposalTable';
