@@ -8,63 +8,63 @@ datasource db {
 }
 
 model User {
-  id             Int              @id @default(autoincrement())
-  name           String
-  email          String           @unique
-  password       String
-  role           Role
-  createdAt      DateTime         @default(now())
-  posts          Post[]           @relation("UserPosts")
-  proposals      Proposal[]       @relation("UserProposals")
-  subscriptions  Subscription[]
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  password      String
+  role          Role
+  createdAt     DateTime       @default(now())
+  posts         Post[]         @relation("UserPosts")
+  proposals     Proposal[]     @relation("UserProposals")
+  subscriptions Subscription[]
 }
 
 model Post {
-  id               Int             @id @default(autoincrement())
+  id               Int        @id @default(autoincrement())
   title            String
   description      String
   value            Float
   equityPercentage Float
   offerType        OfferType
-  status           PostStatus      @default(PENDING)
-  createdAt        DateTime        @default(now())
-  user             User            @relation("UserPosts", fields: [userId], references: [id])
+  status           PostStatus @default(PENDING)
+  createdAt        DateTime   @default(now())
+  user             User       @relation("UserPosts", fields: [userId], references: [id])
   userId           Int
   proposals        Proposal[]
   boosts           Boost[]
 }
 
 model Proposal {
-  id             Int              @id @default(autoincrement())
-  valueProposed  Float
-  equityOffered  Float
-  message        String?
-  status         ProposalStatus   @default(PENDING)
-  createdAt      DateTime         @default(now())
-  user           User             @relation("UserProposals", fields: [userId], references: [id])
-  userId         Int
-  post           Post             @relation(fields: [postId], references: [id])
-  postId         Int
+  id            Int            @id @default(autoincrement())
+  valueProposed Float
+  equityOffered Float
+  message       String?
+  status        ProposalStatus @default(PENDING)
+  createdAt     DateTime       @default(now())
+  user          User           @relation("UserProposals", fields: [userId], references: [id])
+  userId        Int
+  post          Post           @relation(fields: [postId], references: [id])
+  postId        Int
 }
 
 model Subscription {
-  id              Int              @id @default(autoincrement())
-  tipo            SubscriptionType
-  status          SubscriptionStatus
-  inicio          DateTime
-  fim             DateTime
-  seloVerificado  Boolean
-  user            User             @relation(fields: [userId], references: [id])
-  userId          Int
+  id             Int                @id @default(autoincrement())
+  tipo           SubscriptionType
+  status         SubscriptionStatus
+  inicio         DateTime
+  fim            DateTime
+  seloVerificado Boolean
+  user           User               @relation(fields: [userId], references: [id])
+  userId         Int
 }
 
 model Boost {
-  id        Int       @id @default(autoincrement())
-  inicio    DateTime
-  fim       DateTime
-  ativo     Boolean
-  post      Post      @relation(fields: [postId], references: [id])
-  postId    Int
+  id     Int      @id @default(autoincrement())
+  inicio DateTime
+  fim    DateTime
+  ativo  Boolean
+  post   Post     @relation(fields: [postId], references: [id])
+  postId Int
 }
 
 enum Role {
