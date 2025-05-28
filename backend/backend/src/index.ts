@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
 import adminRoutes from './routes/adminRoutes';
+import postRoutes from './routes/postRoutes';
 
 const app = express();
 const prisma = new PrismaClient();
@@ -14,6 +15,7 @@ app.use(express.json());
 // Rotas públicas
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
+app.use('/posts', postRoutes);
 
 // Rotas protegidas (painel admin)
 app.use('/admin', adminRoutes);

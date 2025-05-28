@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { authMiddleware } from '../middleware/auth';
+import { authMiddleware, roleMiddleware } from '../middleware/auth';
 
 const router = Router();
 const prisma = new PrismaClient();
 
-// Todas as rotas de admin são protegidas
+// Todas as rotas de admin são protegidas e requerem role ADMIN
 router.use(authMiddleware);
+router.use(roleMiddleware(['ADMIN']));
 
 /**
  * GET /admin/users

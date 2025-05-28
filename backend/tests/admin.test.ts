@@ -1,6 +1,21 @@
 import request from 'supertest';
 import app from '../src/index';
-import { generateToken } from '../src/middleware/auth';
+
+let token: string;
+
+beforeAll(async () => {
+  await request(app)
+    .post('/auth/register')
+    .send({ email: 'admin@example.com', password: 'adminpass', role: 'ADMIN' })
+    .expect(201);
+
+  const res = await request(app)
+    .post('/auth/login')
+    .send({ email: 'admin@example.com', password: 'adminpass' })
+    .expect(200);
+
+  token = res.body.token;
+});
 
 describe('Admin Routes', () => {
   it('should return 401 when no token is provided', async () => {
@@ -8,8 +23,6 @@ describe('Admin Routes', () => {
   });
 
   it('should allow access with valid token', async () => {
-    const token = generateToken();
-
     const res = await request(app)
       .get('/admin/users')
       .set('Authorization', `Bearer ${token}`)

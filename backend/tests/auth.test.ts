@@ -5,9 +5,12 @@ describe('Auth Routes', () => {
   const email = 'test@example.com';
   const password = 'password123';
 
-  beforeAll(async () => {
-    // Create user for login test
-    await request(app).post('/users').send({ email, password });
+  it('should register a user', async () => {
+    const res = await request(app)
+      .post('/auth/register')
+      .send({ email, password })
+      .expect(201);
+    expect(res.body).toHaveProperty('id');
   });
 
   it('should login successfully with correct credentials', async () => {
@@ -17,6 +20,14 @@ describe('Auth Routes', () => {
       .expect(200);
 
     expect(res.body).toHaveProperty('token');
+  });
+
+  it('should handle forgot password', async () => {
+    const res = await request(app)
+      .post('/auth/forgot-password')
+      .send({ email })
+      .expect(200);
+    expect(res.body).toHaveProperty('message');
   });
 
   it('should fail login with wrong credentials', async () => {

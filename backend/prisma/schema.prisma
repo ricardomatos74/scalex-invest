@@ -11,5 +11,45 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
+  premium   Boolean  @default(false)
+  role      Role     @default(INVESTIDOR)
   createdAt DateTime @default(now())
+  posts     Post[]
+  boosts    Boost[]
+}
+
+enum Role {
+  ADMIN
+  EMPRESA
+  INVESTIDOR
+}
+
+model Post {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  valor       Float
+  percentual  Float
+  offerType   OfferType
+  empresa     User       @relation(fields: [empresaId], references: [id])
+  empresaId   Int
+  createdAt   DateTime   @default(now())
+  boosts      Boost[]
+}
+
+model Boost {
+  id        Int      @id @default(autoincrement())
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  empresa   User     @relation(fields: [empresaId], references: [id])
+  empresaId Int
+  inicio    DateTime
+  fim       DateTime
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+enum OfferType {
+  UNICO
+  MULTIPLO
 }
