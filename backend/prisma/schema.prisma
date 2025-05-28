@@ -7,9 +7,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
+enum Role {
+  investidor
+  empresa
+  admin
 }
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String?
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(investidor)
+  createdAt    DateTime @default(now())
+  company      Company?
+  proposals    Proposal[] @relation("InvestorProposals")
+}
+
+model Company {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  name      String
+  bio       String?
+  website   String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  projects  Project[]
+}
+
+model Project {
+  id                Int        @id @default(autoincrement())
+  companyId         Int
+  title             String
+  description       String
+  totalAmount       Float
+  percentageOffered Float
+  maxInvestors      Int
+  deadline          DateTime
+  status            String
+  createdAt         DateTime   @default(now())
+  company           Company    @relation(fields: [companyId], references: [id])
+  proposals         Proposal[]
+}
+
+model Proposal {
+  id                 Int      @id @default(autoincrement())
+  projectId          Int
+  investorId         Int
+  amount             Float
+  percentageRequested Float
+  status             String
+  createdAt          DateTime @default(now())
+  project            Project  @relation(fields: [projectId], references: [id])
+  investor           User     @relation("InvestorProposals", fields: [investorId], references: [id])
+}
+
+
