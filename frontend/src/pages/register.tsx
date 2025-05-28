@@ -58,6 +58,7 @@ export default function Register() {
         />
         {error && <p className="text-red-600">{error}</p>}
         <button type="submit" className="bg-blue-600 text-white p-2">
+   
           Registrar
         </button>
       </form>
