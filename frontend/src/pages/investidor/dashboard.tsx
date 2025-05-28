@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import withAuth from '../../components/withAuth';
+import { withAuth } from '../../components/withAuth';
 import api from '../../services/api';
 import { getToken, parseToken } from '../../utils/auth';
 import PostCard, { Post } from '../../components/PostCard';
