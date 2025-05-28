@@ -1,3 +1,5 @@
+// Prisma schema for ScaleX Invest
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,25 +16,25 @@ enum Role {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   name         String?
-  email        String   @unique
+  email        String    @unique
   passwordHash String
-  role         Role     @default(investidor)
-  premium      Boolean  @default(false)
-  createdAt    DateTime @default(now())
+  role         Role      @default(investidor)
+  premium      Boolean   @default(false)
+  createdAt    DateTime  @default(now())
   company      Company?
   proposals    Proposal[] @relation("InvestorProposals")
 }
 
 model Company {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @unique
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique
   name      String
   bio       String?
   website   String?
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
   projects  Project[]
 }
 
@@ -87,5 +89,3 @@ model Boost {
   createdAt DateTime @default(now())
   company   Company  @relation(fields: [companyId], references: [id])
 }
-
-
