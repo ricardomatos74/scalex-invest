@@ -36,7 +36,7 @@ export default function Register() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border p-2"
+    />       className="border p-2"
   
                 <label htmlFor="role">Tipo de usuário</label>
       <select
@@ -48,7 +48,7 @@ export default function Register() {
         <option value="EMPRESA">Empresa</option>
         <option value="INVESTIDOR">Investidor</option>
         <option value="ADMIN">Admin</option>
-      </select>/>
+      </select/>
         <input
           type="password"
           placeholder="Senha"
