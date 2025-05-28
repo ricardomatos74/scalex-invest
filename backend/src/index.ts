@@ -4,6 +4,10 @@ import projectRoutes from './routes/projectRoutes';
 import proposalRoutes from './routes/proposalRoutes';
 import adminRoutes from './routes/adminRoutes';
 import userRoutes from './routes/userRoutes';
+import postRoutes from './routes/postRoutes';
+import subscriptionRoutes from './routes/subscriptionRoutes';
+import negotiationRoutes from './routes/negotiationRoutes';
+import boostRoutes from './routes/boostRoutes';
 
 const app = express();
 app.use(express.json());
@@ -13,6 +17,10 @@ app.use('/projects', projectRoutes);
 app.use(proposalRoutes); // /users/:id/proposals
 app.use('/users', userRoutes); // for tests
 app.use('/admin', adminRoutes);
+app.use('/posts', postRoutes);
+app.use('/subscriptions', subscriptionRoutes);
+app.use('/negotiations', negotiationRoutes);
+app.use('/boosts', boostRoutes);
 
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
