@@ -19,6 +19,7 @@ model User {
   email        String   @unique
   passwordHash String
   role         Role     @default(investidor)
+  premium      Boolean  @default(false)
   createdAt    DateTime @default(now())
   company      Company?
   proposals    Proposal[] @relation("InvestorProposals")
@@ -60,6 +61,31 @@ model Proposal {
   createdAt          DateTime @default(now())
   project            Project  @relation(fields: [projectId], references: [id])
   investor           User     @relation("InvestorProposals", fields: [investorId], references: [id])
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  authorId  Int
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
+  author    User     @relation(fields: [authorId], references: [id])
+}
+
+model Subscription {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  start     DateTime @default(now())
+  end       DateTime?
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Boost {
+  id        Int      @id @default(autoincrement())
+  companyId Int
+  message   String
+  createdAt DateTime @default(now())
+  company   Company  @relation(fields: [companyId], references: [id])
 }
 
 
