@@ -3,12 +3,21 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
-export function authMiddleware(req: Request, res: Response, next: NextFunction) {
+export interface AuthRequest extends Request {
+  user?: any;
+}
+
+export function authMiddleware(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) {
   const auth = req.headers.authorization;
   if (auth && auth.startsWith('Bearer ')) {
     const token = auth.substring(7);
     try {
-      jwt.verify(token, JWT_SECRET);
+      const payload = jwt.verify(token, JWT_SECRET) as any;
+      req.user = payload;
       return next();
     } catch {
       return res.status(401).json({ error: 'Token inválido' });
