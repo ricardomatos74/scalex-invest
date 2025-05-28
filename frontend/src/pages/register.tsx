@@ -7,12 +7,13 @@ export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+    const [role, setRole] = useState('EMPRESA');
   const [error, setError] = useState('');
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
-      await api.post('/auth/register', { name, email, password });
+      await api.post('/auth/register', { name, email, password,role });
       router.push('/login');
     } catch (err) {
       setError('Erro ao registrar');
@@ -36,7 +37,18 @@ export default function Register() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="border p-2"
-        />
+  
+                <label htmlFor="role">Tipo de usuário</label>
+      <select
+        name="role"
+        value={role}
+        onChange={(e) => setRole(e.target.value)}
+        className="border p-2"
+      >
+        <option value="EMPRESA">Empresa</option>
+        <option value="INVESTIDOR">Investidor</option>
+        <option value="ADMIN">Admin</option>
+      </select>/>
         <input
           type="password"
           placeholder="Senha"
