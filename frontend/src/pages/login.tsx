@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import api from '../services/api';
-import { setToken } from '../utils/auth';
+import { setToken, setRole, parseToken, getDashboardRoute } from '../utils/auth';
 
 export default function Login() {
   const router = useRouter();
@@ -13,8 +13,15 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await api.post('/auth/login', { email, password });
-      setToken(res.data.token);
-      router.push('/feed');
+      const token = res.data.token;
+      setToken(token);
+      const payload = parseToken(token);
+      if (payload?.role) {
+        setRole(payload.role);
+        router.push(getDashboardRoute(payload.role));
+      } else {
+        router.push('/');
+      }
     } catch (err) {
       setError('Credenciais inválidas');
     }
