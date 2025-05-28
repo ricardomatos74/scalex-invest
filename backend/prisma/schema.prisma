@@ -1,5 +1,3 @@
-// Prisma schema for ScaleX Invest
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,83 +7,94 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  investidor
-  empresa
-  admin
-}
-
 model User {
-  id           Int       @id @default(autoincrement())
-  name         String?
-  email        String    @unique
-  passwordHash String
-  role         Role      @default(investidor)
-  premium      Boolean   @default(false)
-  createdAt    DateTime  @default(now())
-  company      Company?
-  proposals    Proposal[] @relation("InvestorProposals")
-}
-
-model Company {
-  id        Int       @id @default(autoincrement())
-  userId    Int       @unique
-  name      String
-  bio       String?
-  website   String?
-  createdAt DateTime  @default(now())
-  user      User      @relation(fields: [userId], references: [id])
-  projects  Project[]
-}
-
-model Project {
-  id                Int        @id @default(autoincrement())
-  companyId         Int
-  title             String
-  description       String
-  totalAmount       Float
-  percentageOffered Float
-  maxInvestors      Int
-  deadline          DateTime
-  status            String
-  createdAt         DateTime   @default(now())
-  company           Company    @relation(fields: [companyId], references: [id])
-  proposals         Proposal[]
-}
-
-model Proposal {
-  id                 Int      @id @default(autoincrement())
-  projectId          Int
-  investorId         Int
-  amount             Float
-  percentageRequested Float
-  status             String
-  createdAt          DateTime @default(now())
-  project            Project  @relation(fields: [projectId], references: [id])
-  investor           User     @relation("InvestorProposals", fields: [investorId], references: [id])
+  id             Int              @id @default(autoincrement())
+  name           String
+  email          String           @unique
+  password       String
+  role           Role
+  createdAt      DateTime         @default(now())
+  posts          Post[]           @relation("UserPosts")
+  proposals      Proposal[]       @relation("UserProposals")
+  subscriptions  Subscription[]
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  authorId  Int
-  title     String
-  content   String?
-  createdAt DateTime @default(now())
-  author    User     @relation(fields: [authorId], references: [id])
+  id               Int             @id @default(autoincrement())
+  title            String
+  description      String
+  value            Float
+  equityPercentage Float
+  offerType        OfferType
+  status           PostStatus      @default(PENDING)
+  createdAt        DateTime        @default(now())
+  user             User            @relation("UserPosts", fields: [userId], references: [id])
+  userId           Int
+  proposals        Proposal[]
+  boosts           Boost[]
+}
+
+model Proposal {
+  id             Int              @id @default(autoincrement())
+  valueProposed  Float
+  equityOffered  Float
+  message        String?
+  status         ProposalStatus   @default(PENDING)
+  createdAt      DateTime         @default(now())
+  user           User             @relation("UserProposals", fields: [userId], references: [id])
+  userId         Int
+  post           Post             @relation(fields: [postId], references: [id])
+  postId         Int
 }
 
 model Subscription {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  start     DateTime @default(now())
-  end       DateTime?
-  user      User     @relation(fields: [userId], references: [id])
+  id              Int              @id @default(autoincrement())
+  tipo            SubscriptionType
+  status          SubscriptionStatus
+  inicio          DateTime
+  fim             DateTime
+  seloVerificado  Boolean
+  user            User             @relation(fields: [userId], references: [id])
+  userId          Int
 }
 
 model Boost {
-  id        Int      @id @default(autoincrement())
-  companyId Int
-  message   String
-  createdAt DateTime @default(now())
-  company   Company  @relation(fields: [companyId], references: [id])
+  id        Int       @id @default(autoincrement())
+  inicio    DateTime
+  fim       DateTime
+  ativo     Boolean
+  post      Post      @relation(fields: [postId], references: [id])
+  postId    Int
+}
+
+enum Role {
+  ADMIN
+  EMPRESA
+  INVESTIDOR
+}
+
+enum OfferType {
+  UNICO_INVESTIDOR
+  MULTIPLOS
+}
+
+enum PostStatus {
+  PENDING
+  COMPLETO
+}
+
+enum ProposalStatus {
+  PENDING
+  ACEITA
+  RECUSADA
+}
+
+enum SubscriptionType {
+  GRATUITO
+  PREMIUM
+}
+
+enum SubscriptionStatus {
+  ATIVA
+  CANCELADA
 }
