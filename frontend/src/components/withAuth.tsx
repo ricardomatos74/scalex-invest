@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -10,15 +10,16 @@ export function withAuth<P extends object>(
     const router = useRouter();
     const { user } = useAuth();
 
-    if (!user) {
-      router.push('/login');
-      return null;
-    }
+    useEffect(() => {
+      if (!user) {
+        router.push('/login');
+        return;
+      }
 
-    if (!allowedRoles.includes(user.role)) {
-      router.push('/');
-      return null;
-    }
+      if (!allowedRoles.includes(user.role)) {
+        router.push('/');
+      }
+    }, [user, router]);
 
     return <WrappedComponent {...props} />;
   };
