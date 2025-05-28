@@ -1,5 +1,10 @@
 import Link from 'next/link';
-import { isAuthenticated, clearToken } from '../utils/auth';
+import {
+  isAuthenticated,
+  clearToken,
+  getRole,
+  getDashboardRoute,
+} from '../utils/auth';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,15 +15,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             Feed
           </Link>
           {isAuthenticated() ? (
-            <button
-              onClick={() => {
-                clearToken();
-                window.location.href = '/login';
-              }}
-              className="hover:underline"
-            >
-              Logout
-            </button>
+            <>
+              <Link
+                href={getDashboardRoute(getRole())}
+                className="hover:underline"
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={() => {
+                  clearToken();
+                  window.location.href = '/login';
+                }}
+                className="hover:underline"
+              >
+                Logout
+              </button>
+            </>
           ) : (
             <>
               <Link href="/login" className="hover:underline">
