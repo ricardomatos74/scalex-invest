@@ -1,0 +1,60 @@
+import { useState } from 'react';
+
+export interface Negotiation {
+  id: number;
+  amount: number;
+  status: string;
+  investor?: { name?: string } | null;
+  project?: { title?: string } | null;
+}
+
+export default function NegotiationTable({ negotiations }: { negotiations: Negotiation[] }) {
+  const [filter, setFilter] = useState('');
+  const filtered = negotiations.filter((n) => {
+    const term = filter.toLowerCase();
+    return (
+      n.project?.title?.toLowerCase().includes(term) ||
+      n.investor?.name?.toLowerCase().includes(term)
+    );
+  });
+
+  return (
+    <div className="mb-8">
+      <h2 className="text-lg font-semibold mb-2">Negociações</h2>
+      <input
+        placeholder="Filtrar"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        className="border p-2 mb-2"
+      />
+      <div className="overflow-x-auto">
+        <table className="min-w-full border text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="border px-2 py-1">Projeto</th>
+              <th className="border px-2 py-1">Investidor</th>
+              <th className="border px-2 py-1">Valor</th>
+              <th className="border px-2 py-1">Status</th>
+              <th className="border px-2 py-1">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((n) => (
+              <tr key={n.id} className="text-center">
+                <td className="border px-2 py-1">{n.project?.title || n.id}</td>
+                <td className="border px-2 py-1">{n.investor?.name || n.id}</td>
+                <td className="border px-2 py-1">{n.amount}</td>
+                <td className="border px-2 py-1">
+                  <span className="px-2 py-1 rounded bg-gray-200">{n.status}</span>
+                </td>
+                <td className="border px-2 py-1">
+                  <button disabled className="text-xs bg-gray-300 px-2 py-1 cursor-not-allowed">Cancelar negociação</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
