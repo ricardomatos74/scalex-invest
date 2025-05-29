@@ -6,6 +6,8 @@ import prisma from '../prisma/client';
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
 export async function register(req: Request, res: Response) {
+  // Extrai apenas os campos necessários do corpo da requisição. Isso evita que
+  // propriedades inesperadas sejam repassadas para o ORM.
   const { name, email, password, role } = req.body as {
     name?: string;
     email?: string;
@@ -18,19 +20,23 @@ export async function register(req: Request, res: Response) {
   }
 
   try {
-    // Gera o hash da senha recebida e prepara os dados que serão enviados ao Prisma.
-    // Declaramos explicitamente cada campo para evitar que propriedades indesejadas
-    // do corpo da requisição sejam repassadas para o ORM.
-    const hash = await bcrypt.hash(password, 10);
+    // Gera o hash da senha original e monta manualmente o objeto que será
+    // enviado ao Prisma. Assim garantimos que apenas os campos permitidos serão
+    // utilizados na criação do usuário.
+    const passwordHash = await bcrypt.hash(password, 10);
 
     const userData = {
       name,
       email,
-      passwordHash: hash,
-      // Se role não vier definida, assumimos INVESTIDOR como padrão e normalizamos para maiúsculas.
+      // O hash da senha é armazenado em passwordHash; nunca repassamos o campo
+      // password em si para o Prisma.
+      passwordHash,
+      // Se role não vier definida, assumimos INVESTIDOR como padrão e
+      // normalizamos para maiúsculas.
       role: ((role ?? 'INVESTIDOR').toUpperCase() as 'EMPRESA' | 'INVESTIDOR' | 'ADMIN'),
     };
 
+    // Chama o Prisma passando apenas o objeto sanitizado.
     const user = await prisma.user.create({ data: userData });
 
     return res.status(201).json({ id: user.id, email: user.email });
