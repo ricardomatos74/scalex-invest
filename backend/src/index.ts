@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes';
 import proposalRoutes from './routes/proposalRoutes';
@@ -17,7 +17,7 @@ app.use(cors({
 }));
 
 // log every incoming request for debugging
-app.use((req, _res, next) => {
+app.use((req: Request, _res: Response, next: NextFunction) => {
   console.log(req.method, req.path);
   next();
 });
