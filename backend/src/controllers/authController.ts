@@ -18,16 +18,20 @@ export async function register(req: Request, res: Response) {
   }
 
   try {
+    // Gera o hash da senha recebida e prepara os dados que serão enviados ao Prisma.
+    // Declaramos explicitamente cada campo para evitar que propriedades indesejadas
+    // do corpo da requisição sejam repassadas para o ORM.
     const hash = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        passwordHash: hash,
-        role: (role ?? 'INVESTIDOR').toUpperCase(),
-      },
-    });
+    const userData = {
+      name,
+      email,
+      passwordHash: hash,
+      // Se role não vier definida, assumimos INVESTIDOR como padrão e normalizamos para maiúsculas.
+      role: ((role ?? 'INVESTIDOR').toUpperCase() as 'EMPRESA' | 'INVESTIDOR' | 'ADMIN'),
+    };
+
+    const user = await prisma.user.create({ data: userData });
 
     return res.status(201).json({ id: user.id, email: user.email });
   } catch (err) {
