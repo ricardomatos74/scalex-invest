@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import authRoutes from './routes/authRoutes';
 import proposalRoutes from './routes/proposalRoutes';
 import adminRoutes from './routes/adminRoutes';
@@ -10,6 +11,10 @@ import boostRoutes from './routes/boostRoutes';
 
 const app = express();
 app.use(express.json());
+app.use(cors({
+  origin: 'https://scalex-invest.vercel.app',
+  credentials: true,
+}));
 
 // log every incoming request for debugging
 app.use((req, _res, next) => {
