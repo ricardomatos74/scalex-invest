@@ -8,6 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 export async function register(req: Request, res: Response) {
   console.log('📥 Requisição chegou ao register');
   console.log('BODY:', req.body);
+
   const { name, email, password, role } = req.body as {
     name?: string;
     email?: string;
@@ -18,21 +19,24 @@ export async function register(req: Request, res: Response) {
   if (!email || !password) {
     return res.status(400).json({ error: 'Email e senha são obrigatórios' });
   }
+
   try {
     const hash = await bcrypt.hash(password, 10);
+
     const user = await prisma.user.create({
       data: {
         name,
         email,
         passwordHash: hash,
-        role: ((role as any) || 'INVESTIDOR').toUpperCase(),
+        role: (role || 'INVESTIDOR').toUpperCase(),
       },
     });
+
     return res.status(201).json({ id: user.id, email: user.email });
   } catch (err) {
-  console.error('ERRO REAL:', err);
-  return res.status(400).json({ error: 'Falha ao registrar usuário' });
-}
+    console.error('ERRO REAL:', err);
+    return res.status(400).json({ error: 'Falha ao registrar usuário' });
+  }
 }
 
 export async function login(req: Request, res: Response) {
@@ -41,15 +45,18 @@ export async function login(req: Request, res: Response) {
   if (!email || !password) {
     return res.status(400).json({ error: 'Credenciais inválidas' });
   }
+
   try {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
+
     const match = await bcrypt.compare(password, user.passwordHash);
     if (!match) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
+
     const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET);
     return res.json({ token });
   } catch (err) {
