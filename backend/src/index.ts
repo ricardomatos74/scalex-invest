@@ -11,6 +11,12 @@ import boostRoutes from './routes/boostRoutes';
 const app = express();
 app.use(express.json());
 
+// log every incoming request for debugging
+app.use((req, _res, next) => {
+  console.log(req.method, req.path);
+  next();
+});
+
 app.use('/auth', authRoutes);
 app.use(proposalRoutes); // /users/:id/proposals
 app.use('/users', userRoutes); // for tests
