@@ -6,9 +6,6 @@ import prisma from '../prisma/client';
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
 export async function register(req: Request, res: Response) {
-  console.log('📥 Requisição chegou ao register');
-  console.log('BODY:', req.body);
-
   const { name, email, password, role } = req.body as {
     name?: string;
     email?: string;
@@ -21,13 +18,13 @@ export async function register(req: Request, res: Response) {
   }
 
   try {
-    const hash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 10);
 
     // constrói explicitamente o objeto para evitar campos extras
     const data = {
       name,
       email,
-      passwordHash: hash,
+      passwordHash,
       role: (role || 'INVESTIDOR').toUpperCase(),
     };
 
