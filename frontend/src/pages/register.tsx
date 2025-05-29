@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import api from '../services/api';
 
@@ -13,9 +14,21 @@ export default function Register() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
+      console.log('📤 Enviando dados para API:', {
+        name,
+        email,
+        password,
+        role,
+        baseURL: api.defaults.baseURL,
+      });
       await api.post('/auth/register', { name, email, password, role });
       router.push('/login');
     } catch (err) {
+      if (axios.isAxiosError(err)) {
+        console.log('❌ ERRO AXIOS:', err.response?.data || err.message);
+      } else {
+        console.log('❌ ERRO GERAL:', err);
+      }
       setError('Erro ao registrar');
     }
   }

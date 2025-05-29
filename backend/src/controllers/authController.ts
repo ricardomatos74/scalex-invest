@@ -7,9 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
 export async function register(req: Request, res: Response) {
   console.log('📥 Requisição chegou ao register');
-console.log('BODY:', req.body);
-
-  console.log('RAW BODY:', req.body);
+  console.log('BODY:', req.body);
   const { name, email, password, role } = req.body as {
     name?: string;
     email?: string;
@@ -27,12 +25,12 @@ console.log('BODY:', req.body);
         name,
         email,
         passwordHash: hash,
-        role: (role?.toUpperCase() as any) || 'INVESTIDOR',
+        role: ((role as any) || 'INVESTIDOR').toUpperCase(),
       },
     });
     return res.status(201).json({ id: user.id, email: user.email });
   } catch (err) {
-  console.error('ERRO AO CADASTRAR:', err);
+  console.error('ERRO REAL:', err);
   return res.status(400).json({ error: 'Falha ao registrar usuário' });
 }
 }
