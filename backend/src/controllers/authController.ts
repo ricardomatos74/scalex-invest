@@ -23,14 +23,15 @@ export async function register(req: Request, res: Response) {
   try {
     const hash = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        passwordHash: hash,
-        role: (role || 'INVESTIDOR').toUpperCase(),
-      },
-    });
+    // constrói explicitamente o objeto para evitar campos extras
+    const data = {
+      name,
+      email,
+      passwordHash: hash,
+      role: (role || 'INVESTIDOR').toUpperCase(),
+    };
+
+    const user = await prisma.user.create({ data });
 
     return res.status(201).json({ id: user.id, email: user.email });
   } catch (err) {
