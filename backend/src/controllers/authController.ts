@@ -29,8 +29,9 @@ export async function register(req: Request, res: Response) {
     });
     return res.status(201).json({ id: user.id, email: user.email });
   } catch (err) {
-    return res.status(400).json({ error: 'Falha ao registrar usuário' });
-  }
+  console.error('ERRO AO CADASTRAR:', err);
+  return res.status(400).json({ error: 'Falha ao registrar usuário' });
+}
 }
 
 export async function login(req: Request, res: Response) {
