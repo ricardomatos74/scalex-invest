@@ -4,7 +4,7 @@ export default function Home() {
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading');
 
   useEffect(() => {
-    fetch('http://localhost:4000/health')
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/health`)
       .then((res) => res.json())
       .then((data) => {
         setStatus(data.status === 'ok' ? 'ok' : 'error');
