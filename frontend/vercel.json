@@ -7,7 +7,7 @@
     }
   ],
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://scalex-invest-api.onrender.com"
+    "NEXT_PUBLIC_API_URL": "https://scalex-invest.onrender.com"
   },
   "routes": [
     {
