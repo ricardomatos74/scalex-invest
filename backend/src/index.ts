@@ -31,7 +31,9 @@ app.use('/subscriptions', subscriptionRoutes);
 app.use('/negotiations', negotiationRoutes);
 app.use('/boosts', boostRoutes);
 
-app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+app.get('/health', (_req: Request, res: Response) => {
+  return res.status(200).json({ status: 'ok' });
+});
 
 const PORT = Number(process.env.PORT) || 4000;
 if (process.env.NODE_ENV !== 'test') {
