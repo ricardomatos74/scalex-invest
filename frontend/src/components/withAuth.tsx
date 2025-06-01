@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../contexts/AuthContext';
+import { getToken, parseToken } from '../utils/auth';
 
 export function withAuth<P extends object>(
   WrappedComponent: React.ComponentType<P>,
@@ -8,18 +8,20 @@ export function withAuth<P extends object>(
 ) {
   const ComponentWithAuth: React.FC<P> = (props) => {
     const router = useRouter();
-    const { user } = useAuth();
 
     useEffect(() => {
-      if (!user) {
+      const token = getToken();
+      if (!token) {
         router.push('/login');
         return;
       }
 
-      if (!allowedRoles.includes(user.role)) {
-        router.push('/');
+      const payload = parseToken(token);
+      const role = payload?.type || payload?.role;
+      if (!role || !allowedRoles.includes(role.toLowerCase())) {
+        router.push('/login');
       }
-    }, [user, router]);
+    }, [router]);
 
     return <WrappedComponent {...props} />;
   };

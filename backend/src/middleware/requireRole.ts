@@ -3,8 +3,8 @@ import { AuthRequest } from './auth';
 
 export function requireRole(roles: string[]) {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
-    const user = req.user;
-    if (user && roles.includes(user.role)) {
+    const type = req.userType;
+    if (type && roles.includes(type)) {
       return next();
     }
     return res.status(403).json({ error: 'Forbidden' });
