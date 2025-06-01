@@ -3,7 +3,14 @@ import prisma from '../prisma/client';
 import { AuthRequest } from '../middleware/auth';
 
 export async function createProject(req: AuthRequest, res: Response) {
-  const { title, description, targetValue, quotaCount, category, media } = req.body as {
+  const {
+    title,
+    description,
+    targetValue,
+    quotaCount,
+    category,
+    media,
+  } = req.body as {
     title?: string;
     description?: string;
     targetValue?: number;
@@ -16,8 +23,14 @@ export async function createProject(req: AuthRequest, res: Response) {
     return res.status(403).json({ error: 'Acesso negado' });
   }
 
-  if (!title || !description || !targetValue || !quotaCount || !category) {
-    return res.status(400).json({ error: 'Dados inválidos' });
+  if (
+    !title ||
+    !description ||
+    targetValue === undefined ||
+    quotaCount === undefined ||
+    !category
+  ) {
+    return res.status(422).json({ error: 'Dados inválidos' });
   }
 
   try {
@@ -28,13 +41,14 @@ export async function createProject(req: AuthRequest, res: Response) {
         targetValue: Number(targetValue),
         quotaCount: Number(quotaCount),
         category,
-        media,
+        media: media || undefined,
         userId: req.userId!,
       },
     });
     return res.status(201).json(project);
-  } catch {
-    return res.status(400).json({ error: 'Erro ao criar projeto' });
+  } catch (err) {
+    console.error('Erro ao criar projeto:', err);
+    return res.status(500).json({ error: 'Erro ao criar projeto' });
   }
 }
 

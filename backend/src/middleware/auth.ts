@@ -14,10 +14,12 @@ export function verifyToken(
   next: NextFunction
 ) {
   const auth = req.headers.authorization;
+  console.log('verifyToken header', auth);
   if (auth && auth.startsWith('Bearer ')) {
     const token = auth.substring(7);
     try {
       const payload = jwt.verify(token, JWT_SECRET) as any;
+      console.log('token payload', payload);
       req.userId = payload.userId;
       req.userType = payload.type || payload.role;
       return next();

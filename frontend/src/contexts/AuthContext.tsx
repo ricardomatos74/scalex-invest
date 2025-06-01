@@ -10,18 +10,22 @@ export type User = {
 interface AuthContextType {
   user: User | null;
   setUser: (u: User | null) => void;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   setUser: () => {},
+  loading: true,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = getToken();
+    console.log('AuthProvider init token', token);
     if (token) {
       const payload = parseToken(token);
       if (payload) {
@@ -32,10 +36,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
       }
     }
+    setLoading(false);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, loading }}>
       {children}
     </AuthContext.Provider>
   );
