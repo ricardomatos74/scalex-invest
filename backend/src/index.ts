@@ -22,6 +22,10 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
   next();
 });
 
+app.get('/health', (_req: Request, res: Response) => {
+  return res.status(200).json({ status: 'ok' });
+});
+
 app.use('/auth', authRoutes);
 app.use(proposalRoutes); // /users/:id/proposals
 app.use('/users', userRoutes); // for tests
@@ -30,10 +34,6 @@ app.use('/posts', postRoutes);
 app.use('/subscriptions', subscriptionRoutes);
 app.use('/negotiations', negotiationRoutes);
 app.use('/boosts', boostRoutes);
-
-app.get('/health', (_req: Request, res: Response) => {
-  return res.status(200).json({ status: 'ok' });
-});
 
 const PORT = Number(process.env.PORT) || 4000;
 if (process.env.NODE_ENV !== 'test') {
