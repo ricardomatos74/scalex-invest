@@ -71,6 +71,7 @@ model Project {
   id          String   @id @default(uuid())
   title       String
   description String
+  media       String?
   targetValue Float
   quotaCount  Int
   category    String

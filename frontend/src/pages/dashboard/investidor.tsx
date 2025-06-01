@@ -15,6 +15,13 @@ function InvestidorDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {projects.map((project) => (
           <div key={project.id} className="p-4 bg-white rounded shadow">
+            {project.media && (
+              project.media.includes('video') ? (
+                <video src={project.media} controls className="mb-2 max-h-48" />
+              ) : (
+                <img src={project.media} alt="mídia" className="mb-2 max-h-48" />
+              )
+            )}
             <h2 className="font-semibold text-lg mb-2">{project.title}</h2>
             <p className="mb-1">Meta: {project.targetValue}</p>
             <p className="mb-4">Cotas: {project.quotaCount}</p>
