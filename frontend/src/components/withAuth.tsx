@@ -9,10 +9,12 @@ export function withAuth<P extends object>(
 ) {
   const ComponentWithAuth: React.FC<P> = (props) => {
     const router = useRouter();
-    const { setUser } = useAuth();
+    const { setUser, loading } = useAuth();
 
     useEffect(() => {
+      if (loading) return;
       const token = getToken();
+      console.log('withAuth token', token);
       if (!token) {
         router.push('/login');
         return;
@@ -20,6 +22,7 @@ export function withAuth<P extends object>(
 
       const payload = parseToken(token);
       const role = payload?.type || payload?.role;
+      console.log('withAuth payload', payload);
       if (!role || !allowedRoles.includes(role.toLowerCase())) {
         router.push('/login');
         return;
@@ -30,7 +33,7 @@ export function withAuth<P extends object>(
         name: payload?.name,
         userId: payload?.userId,
       });
-    }, [router, setUser]);
+    }, [router, setUser, loading]);
 
     return <WrappedComponent {...props} />;
   };
