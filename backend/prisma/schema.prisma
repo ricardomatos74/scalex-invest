@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-provider = "sqlite"
+  provider = "sqlite"
   url      = "file:./dev.db"
 }
 
@@ -11,12 +11,13 @@ model User {
   id            Int            @id @default(autoincrement())
   name          String
   email         String         @unique
-  passwordHash String
+  passwordHash  String
   role          Role
   createdAt     DateTime       @default(now())
   posts         Post[]         @relation("UserPosts")
   proposals     Proposal[]     @relation("UserProposals")
   subscriptions Subscription[]
+  projects      Project[]
 }
 
 model Post {
