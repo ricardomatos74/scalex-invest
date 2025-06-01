@@ -8,6 +8,7 @@ import postRoutes from './routes/postRoutes';
 import subscriptionRoutes from './routes/subscriptionRoutes';
 import negotiationRoutes from './routes/negotiationRoutes';
 import boostRoutes from './routes/boostRoutes';
+import projectRoutes from './routes/projectRoutes';
 
 const app = express();
 app.use(express.json());
@@ -31,6 +32,7 @@ app.use(proposalRoutes); // /users/:id/proposals
 app.use('/users', userRoutes); // for tests
 app.use('/admin', adminRoutes);
 app.use('/posts', postRoutes);
+app.use('/projects', projectRoutes);
 app.use('/subscriptions', subscriptionRoutes);
 app.use('/negotiations', negotiationRoutes);
 app.use('/boosts', boostRoutes);

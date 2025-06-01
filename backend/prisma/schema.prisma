@@ -67,6 +67,18 @@ model Boost {
   postId Int
 }
 
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  targetValue Float
+  quotaCount  Int
+  category    String
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+}
+
 enum Role {
   ADMIN
   EMPRESA
