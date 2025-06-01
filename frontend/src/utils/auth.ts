@@ -47,10 +47,10 @@ export function parseToken(token: string): any | null {
 export function getDashboardRoute(role: string | null) {
   switch (role) {
     case 'empresa':
-      return '/empresa/dashboard';
+      return '/dashboard/empresa';
     case 'admin':
-      return '/admin/painel';
+      return '/dashboard/admin';
     default:
-      return '/investidor/dashboard';
+      return '/dashboard/investidor';
   }
 }
