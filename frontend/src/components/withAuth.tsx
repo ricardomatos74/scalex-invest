@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getToken, parseToken } from '../utils/auth';
+import { useAuth } from '../contexts/AuthContext';
 
 export function withAuth<P extends object>(
   WrappedComponent: React.ComponentType<P>,
@@ -8,6 +9,7 @@ export function withAuth<P extends object>(
 ) {
   const ComponentWithAuth: React.FC<P> = (props) => {
     const router = useRouter();
+    const { setUser } = useAuth();
 
     useEffect(() => {
       const token = getToken();
@@ -20,8 +22,15 @@ export function withAuth<P extends object>(
       const role = payload?.type || payload?.role;
       if (!role || !allowedRoles.includes(role.toLowerCase())) {
         router.push('/login');
+        return;
       }
-    }, [router]);
+
+      setUser({
+        role: role.toLowerCase(),
+        name: payload?.name,
+        userId: payload?.userId,
+      });
+    }, [router, setUser]);
 
     return <WrappedComponent {...props} />;
   };

@@ -3,12 +3,13 @@ import prisma from '../prisma/client';
 import { AuthRequest } from '../middleware/auth';
 
 export async function createProject(req: AuthRequest, res: Response) {
-  const { title, description, targetValue, quotaCount, category } = req.body as {
+  const { title, description, targetValue, quotaCount, category, media } = req.body as {
     title?: string;
     description?: string;
     targetValue?: number;
     quotaCount?: number;
     category?: string;
+    media?: string;
   };
 
   if (req.userType !== 'empresa') {
@@ -27,6 +28,7 @@ export async function createProject(req: AuthRequest, res: Response) {
         targetValue: Number(targetValue),
         quotaCount: Number(quotaCount),
         category,
+        media,
         userId: req.userId!,
       },
     });
