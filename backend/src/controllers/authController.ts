@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import prisma from '../prisma/client';
+import { generateToken } from '../middleware/auth';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
 export async function register(req: Request, res: Response) {
   // Extrai apenas os campos necessários do corpo da requisição. Isso evita que
@@ -64,7 +63,7 @@ export async function login(req: Request, res: Response) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
 
-    const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET);
+    const token = generateToken({ id: user.id, role: user.role });
     return res.json({ token });
   } catch (err) {
     return res.status(500).json({ error: 'Erro interno' });

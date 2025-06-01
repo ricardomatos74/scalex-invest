@@ -16,9 +16,11 @@ export default function Login() {
       const token = res.data.token;
       setToken(token);
       const payload = parseToken(token);
-      if (payload?.role) {
-        setRole(payload.role);
-        router.push(getDashboardRoute(payload.role));
+      const role = payload?.type || payload?.role;
+      if (role) {
+        const normalized = role.toLowerCase();
+        setRole(normalized);
+        router.push(getDashboardRoute(normalized));
       } else {
         router.push('/');
       }

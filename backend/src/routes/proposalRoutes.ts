@@ -6,12 +6,12 @@ import {
   acceptProposal,
   rejectProposal,
 } from '../controllers/proposalController';
-import { authMiddleware } from '../middleware/auth';
+import { verifyToken } from '../middleware/auth';
 import { requireRole } from '../middleware/requireRole';
 
 const router = Router();
 
-router.use(authMiddleware);
+router.use(verifyToken);
 
 router.post('/propostas', requireRole(['investidor']), createProposalForPost);
 router.get('/posts/:id/propostas', requireRole(['empresa']), listPostProposals);

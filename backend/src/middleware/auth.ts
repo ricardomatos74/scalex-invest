@@ -4,10 +4,11 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
 export interface AuthRequest extends Request {
-  user?: any;
+  userId?: number;
+  userType?: string;
 }
 
-export function authMiddleware(
+export function verifyToken(
   req: AuthRequest,
   res: Response,
   next: NextFunction
@@ -17,7 +18,8 @@ export function authMiddleware(
     const token = auth.substring(7);
     try {
       const payload = jwt.verify(token, JWT_SECRET) as any;
-      req.user = payload;
+      req.userId = payload.userId;
+      req.userType = payload.type || payload.role;
       return next();
     } catch {
       return res.status(401).json({ error: 'Token inválido' });
@@ -26,6 +28,11 @@ export function authMiddleware(
   return res.status(401).json({ error: 'Unauthorized' });
 }
 
-export function generateToken(payload: object) {
-  return jwt.sign(payload, JWT_SECRET);
+export const authMiddleware = verifyToken;
+
+export function generateToken(user: { id: number; role: string }) {
+  return jwt.sign(
+    { userId: user.id, type: user.role.toLowerCase() },
+    JWT_SECRET
+  );
 }

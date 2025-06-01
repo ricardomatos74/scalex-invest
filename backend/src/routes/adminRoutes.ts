@@ -6,13 +6,13 @@ import {
   listNegotiations,
   listPosts,
 } from '../controllers/adminController';
-import { authMiddleware } from '../middleware/auth';
+import { verifyToken } from '../middleware/auth';
 import { adminOnly } from '../middleware/adminOnly';
 import prisma from '../prisma/client';
 
 const router = Router();
 
-router.use(authMiddleware);
+router.use(verifyToken);
 router.use(adminOnly);
 router.get('/dashboard', dashboard);
 router.get('/analytics', analytics);

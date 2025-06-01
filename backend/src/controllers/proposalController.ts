@@ -36,8 +36,8 @@ export async function createProposalForPost(req: AuthRequest, res: Response) {
     amount?: number;
     percentageRequested?: number;
   };
-  if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
-  const investorId = req.user.userId;
+  if (!req.userId) return res.status(401).json({ error: 'Unauthorized' });
+  const investorId = req.userId;
   if (!postId || !amount) {
     return res.status(400).json({ error: 'Dados inválidos' });
   }
